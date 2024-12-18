@@ -6,6 +6,7 @@ import {
   Pressable,
   Animated,
   TouchableWithoutFeedback,
+  Image,
 } from "react-native";
 import { TextInput, HelperText, Title } from "react-native-paper";
 import { useRouter } from "expo-router";
@@ -33,6 +34,8 @@ export default function LoginForm() {
   });
   const [errors, setErrors] = useState<Partial<FormData>>({});
   const [animation] = useState(new Animated.Value(1));
+
+  const Logo = require("../assets/images/logo.png");
 
   const validateForm = (): boolean => {
     const newErrors: Partial<FormData> = {};
@@ -85,7 +88,11 @@ export default function LoginForm() {
 
   return (
     <View style={styles.container}>
-      <Title style={styles.title}>Log In</Title>
+      <View style={styles.logoContainer}>
+        <Image source={Logo} style={styles.lapaganaLogo} />
+      </View>
+
+      <Title style={styles.title}>LOG IN</Title>
       <TextInput
         label="Email"
         value={formData.email}
@@ -144,9 +151,20 @@ export default function LoginForm() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: 5,
+  },
+
+  logoContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20,
+  },
+  lapaganaLogo: {
+    width: 250,
+    height: 300,
   },
   title: {
+    fontWeight: "bold",
     fontSize: 24,
     marginBottom: 20,
     textAlign: "center",
