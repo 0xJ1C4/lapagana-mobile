@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Canvas,
   DiffRect,
@@ -6,19 +7,10 @@ import {
   Line,
   vec,
 } from "@shopify/react-native-skia";
-import {
-  Dimensions,
-  Platform,
-  StyleSheet,
-  View,
-  Text,
-  Pressable,
-} from "react-native";
-
+import { Dimensions, StyleSheet, View, Text, Pressable } from "react-native";
 import { useRouter } from "expo-router";
 
 const { width, height } = Dimensions.get("window");
-const router = useRouter();
 const innerDimension = 250;
 const cornerSize = 30;
 
@@ -34,11 +26,13 @@ const inner = rrect(
   5
 );
 
-const handleLoginFormNavigation = () => {
-  router.replace("/LogForm");
-};
-
 export const Overlay = () => {
+  const router = useRouter();
+
+  const handleLoginFormNavigation = () => {
+    router.replace("/LogForm");
+  };
+
   return (
     <>
       <Canvas
@@ -157,7 +151,6 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: -1, height: 1 },
     textShadowRadius: 10,
   },
-
   scannerContainer: {
     marginTop: 420,
   },
@@ -167,7 +160,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingHorizontal: 40,
   },
-
   loginFormContainer: {
     flexDirection: "row",
     justifyContent: "space-evenly",
