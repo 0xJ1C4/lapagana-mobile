@@ -7,6 +7,10 @@ import {
   Animated,
   TouchableWithoutFeedback,
   Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  SafeAreaView,
 } from "react-native";
 import { TextInput, HelperText, Title } from "react-native-paper";
 import { useRouter } from "expo-router";
@@ -15,11 +19,6 @@ type RootStackParamList = {
   Login: undefined;
   QRCode: undefined;
 };
-
-// type LoginScreenNavigationProp = StackNavigationProp<
-//   RootStackParamList,
-//   "Login"
-// >;
 
 interface FormData {
   email: string;
@@ -87,73 +86,88 @@ export default function LoginForm() {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.logoContainer}>
-        <Image source={Logo} style={styles.lapaganaLogo} />
-      </View>
-
-      <Title style={styles.title}>LOG IN</Title>
-      <TextInput
-        label="Email"
-        value={formData.email}
-        onChangeText={(text) => setFormData({ ...formData, email: text })}
-        mode="outlined"
-        keyboardType="email-address"
-        autoCapitalize="none"
-        error={!!errors.email}
-      />
-      <HelperText type="error" visible={!!errors.email}>
-        {errors.email}
-      </HelperText>
-      <TextInput
-        label="Password"
-        value={formData.password}
-        onChangeText={(text) => setFormData({ ...formData, password: text })}
-        mode="outlined"
-        secureTextEntry
-        error={!!errors.password}
-      />
-      <HelperText type="error" visible={!!errors.password}>
-        {errors.password}
-      </HelperText>
-
-      <View style={styles.qrCodeContainer}>
-        <Pressable
-          style={({ pressed }) => [
-            styles.qrCodeButton,
-            pressed && styles.qrCodeButtonPressed,
-          ]}
-          onPress={handleQRCodeNavigation}
-        >
-          <Text style={styles.qrCodeButtonText}>Connect with QR Code</Text>
-        </Pressable>
-      </View>
-
-      <TouchableWithoutFeedback
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
-        onPress={handleSubmit}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "android" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "android" ? 0 : 20}
+    >
+      <ScrollView
+        contentContainerStyle={styles.scrollViewContent}
+        keyboardShouldPersistTaps="handled"
       >
-        <Animated.View
-          style={[
-            styles.button,
-            {
-              transform: [{ scale: animation }],
-            },
-          ]}
+        <View style={styles.logoContainer}>
+          <Image
+            source={Logo}
+            style={styles.lapaganaLogo}
+            resizeMode="contain"
+          />
+        </View>
+
+        <Title style={styles.title}>LOG IN</Title>
+        <TextInput
+          label="Email"
+          value={formData.email}
+          onChangeText={(text) => setFormData({ ...formData, email: text })}
+          mode="outlined"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          error={!!errors.email}
+          style={styles.input}
+        />
+        <HelperText type="error" visible={!!errors.email}>
+          {errors.email}
+        </HelperText>
+        <TextInput
+          label="Password"
+          value={formData.password}
+          onChangeText={(text) => setFormData({ ...formData, password: text })}
+          mode="outlined"
+          secureTextEntry
+          error={!!errors.password}
+          style={styles.input}
+        />
+        <HelperText type="error" visible={!!errors.password}>
+          {errors.password}
+        </HelperText>
+
+        <View style={styles.qrCodeContainer}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.qrCodeButton,
+              pressed && styles.qrCodeButtonPressed,
+            ]}
+            onPress={handleQRCodeNavigation}
+          >
+            <Text style={styles.qrCodeButtonText}>Connect with QR Code</Text>
+          </Pressable>
+        </View>
+
+        <TouchableWithoutFeedback
+          onPressIn={handlePressIn}
+          onPressOut={handlePressOut}
+          onPress={handleSubmit}
         >
-          <Text style={styles.buttonText}>Log In</Text>
-        </Animated.View>
-      </TouchableWithoutFeedback>
-    </View>
+          <Animated.View
+            style={[
+              styles.button,
+              {
+                transform: [{ scale: animation }],
+              },
+            ]}
+          >
+            <Text style={styles.buttonText}>Log In</Text>
+          </Animated.View>
+        </TouchableWithoutFeedback>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 5,
+  scrollViewContent: {
+    flexGrow: 1,
+    padding: 20,
+    justifyContent: "center",
   },
-
   logoContainer: {
     alignItems: "center",
     justifyContent: "center",
@@ -168,6 +182,9 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 20,
     textAlign: "center",
+  },
+  input: {
+    marginBottom: 10,
   },
   button: {
     marginTop: 20,
@@ -186,9 +203,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
     marginBottom: 10,
-  },
-  qrCodeText: {
-    fontSize: 16,
   },
   qrCodeButton: {
     backgroundColor: "#2196F3",
